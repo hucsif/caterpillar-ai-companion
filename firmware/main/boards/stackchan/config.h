@@ -82,4 +82,10 @@
 #define SERVO_YAW_ID 1
 #define SERVO_PITCH_ID 2
 
+// R60ABD1 毫米波雷达 (Grove PORT.C: G17=TX, G18=RX)
+#define RADAR_UART_NUM  UART_NUM_2
+#define RADAR_TX_PIN    17
+#define RADAR_RX_PIN    18
+#define RADAR_BAUD      115200
+
 #endif // _BOARD_CONFIG_H_

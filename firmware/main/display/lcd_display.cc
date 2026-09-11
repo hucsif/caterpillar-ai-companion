@@ -1308,3 +1308,9 @@ void LcdDisplay::SetHideSubtitle(bool hide) {
         }
     }
 }
+
+void LcdDisplay::BringUIBarsToFront() {
+    if (top_bar_) lv_obj_move_foreground(top_bar_);
+    if (status_bar_) lv_obj_move_foreground(status_bar_);
+    if (bottom_bar_) lv_obj_move_foreground(bottom_bar_);
+}

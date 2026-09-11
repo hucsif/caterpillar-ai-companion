@@ -532,6 +532,7 @@ void Application::InitializeProtocol() {
         });
     });
     
+    // 处理从服务器传来的json消息
     protocol_->OnIncomingJson([this, display, &board](const cJSON* root) {
         // Parse JSON data
         auto type = cJSON_GetObjectItem(root, "type");
@@ -549,28 +550,16 @@ void Application::InitializeProtocol() {
             } else if (strcmp(state->valuestring, "stop") == 0) {
                 Schedule([this, &board]() {
                     if (GetDeviceState() == kDeviceStateSpeaking) {
-                        // stackchan-mcp is an MCP gateway, not a standalone
-                        // xiaozhi-style conversational agent. Listening must
-                        // be triggered explicitly — either by the user
-                        // (touch / button / external command) or by the
-                        // AI (gateway-issued StartListening). The upstream
-                        // xiaozhi behaviour of automatically re-entering
-                        // listening after every TTS utterance is a footgun
-                        // here: when the firmware's TTS pipeline stalls
-                        // (e.g. audio_input task watchdog timeouts during
-                        // long playback) the deferred tts.stop event lands
-                        // long after the user expected the conversation to
-                        // be quiescent, and the device then records ~30 s
-                        // of ambient room audio that the gateway happily
-                        // posts as a user utterance.
-                        //
-                        // Returning to Idle here forces the listening
-                        // boundary to be set explicitly by whoever wants
-                        // to continue the conversation (user touch,
-                        // gateway-driven push-to-talk, etc.). Loop-style
-                        // Listening→Speaking→Listening flows belong on
-                        // the gateway side, not in this firmware.
                         SetDeviceState(kDeviceStateIdle);
+                        // 仅唤醒词触发的对话：TTS 回复后自动重入倾听一次
+                        if (wake_word_triggered_) {
+                            wake_word_triggered_ = false;
+                            Schedule([this]() {
+                                if (GetDeviceState() == kDeviceStateIdle) {
+                                    StartListening(kListeningProfileVoice, kListeningModeAutoStop);
+                                }
+                            });
+                        }
                     }
                     // Phase 4 audio (Issue #76): stop the avatar mouth
                     // animation unconditionally on tts.stop. A wake-word /
@@ -619,8 +608,17 @@ void Application::InitializeProtocol() {
                 ESP_LOGW(TAG, "listen message missing state");
             } else if (strcmp(state->valuestring, "start") == 0) {
                 auto profile = ParseListenProfile(root);
-                Schedule([this, profile]() {
-                    StartListening(profile);
+                // 解析 mode 字段: "auto"(VAD自动停) / "manual"(手动停) / "realtime"
+                auto mode_j = cJSON_GetObjectItem(root, "mode");
+                ListeningMode mode = kListeningModeAutoStop; // 默认自动
+                if (cJSON_IsString(mode_j)) {
+                    if (strcmp(mode_j->valuestring, "manual") == 0)
+                        mode = kListeningModeManualStop;
+                    else if (strcmp(mode_j->valuestring, "realtime") == 0)
+                        mode = kListeningModeRealtime;
+                }
+                Schedule([this, profile, mode]() {
+                    StartListening(profile, mode);
                 });
             } else if (strcmp(state->valuestring, "stop") == 0) {
                 StopListening();
@@ -638,10 +636,12 @@ void Application::InitializeProtocol() {
         } else if (strcmp(type->valuestring, "llm") == 0) {
             auto emotion = cJSON_GetObjectItem(root, "emotion");
             if (cJSON_IsString(emotion)) {
-                Schedule([display, emotion_str = std::string(emotion->valuestring)]() {
+                Schedule([display, &board, emotion_str = std::string(emotion->valuestring)]() {
                     display->SetEmotion(emotion_str.c_str());
+                    board.OnEmotionChanged(emotion_str.c_str());
                 });
             }
+        // 匹配到 mcp 类型的消息，交给 McpServer 处理
         } else if (strcmp(type->valuestring, "mcp") == 0) {
             auto payload = cJSON_GetObjectItem(root, "payload");
             if (cJSON_IsObject(payload)) {
@@ -749,9 +749,11 @@ void Application::ToggleChatState() {
     xEventGroupSetBits(event_group_, MAIN_EVENT_TOGGLE_CHAT);
 }
 
-uint32_t Application::BeginListeningRequest(ListeningProfile profile) {
+uint32_t Application::BeginListeningRequest(ListeningProfile profile,
+                                             ListeningMode mode) {
     uint32_t generation = listening_request_generation_.fetch_add(1, std::memory_order_acq_rel) + 1;
     pending_listening_profile_.store(profile, std::memory_order_release);
+    pending_listening_mode_.store(mode, std::memory_order_release);
     pending_listening_generation_.store(generation, std::memory_order_release);
     return generation;
 }
@@ -759,6 +761,7 @@ uint32_t Application::BeginListeningRequest(ListeningProfile profile) {
 void Application::InvalidatePendingListeningRequest() {
     listening_request_generation_.fetch_add(1, std::memory_order_acq_rel);
     pending_listening_profile_.store(kListeningProfileVoice, std::memory_order_release);
+    pending_listening_mode_.store(kListeningModeManualStop, std::memory_order_release);
     pending_listening_generation_.store(0, std::memory_order_release);
 }
 
@@ -767,12 +770,8 @@ bool Application::IsListeningRequestCurrent(uint32_t generation) const {
         listening_request_generation_.load(std::memory_order_acquire) == generation;
 }
 
-void Application::StartListening(ListeningProfile profile) {
-    // Thin event setter. The popup-on-listening flag is armed inside
-    // HandleStartListeningEvent (main task) so all writes to
-    // play_popup_on_listening_ converge to the same task that reads
-    // and clears it in HandleStateChangedEvent.
-    BeginListeningRequest(profile);
+void Application::StartListening(ListeningProfile profile, ListeningMode mode) {
+    BeginListeningRequest(profile, mode);
     xEventGroupSetBits(event_group_, MAIN_EVENT_START_LISTENING);
 }
 
@@ -805,7 +804,7 @@ void Application::HandleToggleChatEvent() {
     if (state == kDeviceStateIdle) {
         ListeningMode mode = GetDefaultListeningMode();
         if (!protocol_->IsAudioChannelOpened()) {
-            uint32_t generation = BeginListeningRequest(kListeningProfileVoice);
+            uint32_t generation = BeginListeningRequest(kListeningProfileVoice, kListeningModeAutoStop);
             SetDeviceState(kDeviceStateConnecting);
             // Schedule to let the state change be processed first (UI update)
             Schedule([this, mode, generation]() {
@@ -852,7 +851,7 @@ void Application::HandleStartListeningEvent() {
     if (!IsListeningRequestCurrent(requested_generation)) {
         return;
     }
-    
+
     if (state == kDeviceStateActivating) {
         SetDeviceState(kDeviceStateIdle);
         return;
@@ -868,39 +867,24 @@ void Application::HandleStartListeningEvent() {
     }
 
     auto requested_profile = pending_listening_profile_.load(std::memory_order_acquire);
+    auto requested_mode = pending_listening_mode_.load(std::memory_order_acquire);
     if (state == kDeviceStateIdle || state == kDeviceStateSpeaking) {
         listening_profile_ = requested_profile;
-
-        // Arm the OGG_POPUP cue that HandleStateChangedEvent plays after
-        // the kDeviceStateListening branch resets the decoder
-        // (~line 980). Previously this flag was set only on wake-word
-        // activation paths (HandleWakeWordDetectedEvent /
-        // ContinueWakeWordInvoke), so callers of the public
-        // StartListening() API — board-level touch buttons,
-        // server-driven listen, etc. — silently lost the cue.
-        //
-        // Setting it here (main task, after the Activating /
-        // WifiConfiguring / null-protocol early returns and gated on
-        // the states that actually transition toward Listening) avoids
-        // latching the flag for a no-op StartListening so an unrelated
-        // future Listening transition doesn't unexpectedly play the
-        // popup.
         play_popup_on_listening_ = true;
     }
 
     if (state == kDeviceStateIdle) {
         if (!protocol_->IsAudioChannelOpened()) {
             SetDeviceState(kDeviceStateConnecting);
-            // Schedule to let the state change be processed first (UI update)
-            Schedule([this, requested_generation]() {
-                ContinueOpenAudioChannel(kListeningModeManualStop, requested_generation);
+            Schedule([this, requested_generation, requested_mode]() {
+                ContinueOpenAudioChannel(requested_mode, requested_generation);
             });
             return;
         }
-        SetListeningMode(kListeningModeManualStop);
+        SetListeningMode(requested_mode);
     } else if (state == kDeviceStateSpeaking) {
         AbortSpeaking(kAbortReasonNone);
-        SetListeningMode(kListeningModeManualStop);
+        SetListeningMode(requested_mode);
     }
 }
 
@@ -942,10 +926,16 @@ void Application::HandleWakeWordDetectedEvent() {
     auto wake_word = audio_service_.GetLastWakeWord();
     ESP_LOGI(TAG, "Wake word detected: %s (state: %d)", wake_word.c_str(), (int)state);
 
+    // 标记唤醒词触发，TTS 回复后自动重入倾听一次
+    wake_word_triggered_ = true;
+
+    // 唤醒词触发 → 板级钩子：看向人（一次性）
+    Board::GetInstance().OnWakeWord();
+
     if (state == kDeviceStateIdle) {
         audio_service_.EncodeWakeWord();
         auto wake_word = audio_service_.GetLastWakeWord();
-        uint32_t generation = BeginListeningRequest(kListeningProfileVoice);
+        uint32_t generation = BeginListeningRequest(kListeningProfileVoice, kListeningModeAutoStop);
 
         if (!protocol_->IsAudioChannelOpened()) {
             SetDeviceState(kDeviceStateConnecting);
@@ -1038,7 +1028,15 @@ void Application::HandleStateChangedEvent() {
             audio_service_.EnableRawCapture(false);
             audio_service_.EnableVoiceProcessing(false);
             listening_profile_ = ListeningProfileAfterStop(listening_profile_);
+            // 先停后启确保 AFE 唤醒词模型完整重置
+            audio_service_.EnableWakeWordDetection(false);
             audio_service_.EnableWakeWordDetection(true);
+            // 关闭音频通道（重置 audio_channel_open_ 标志），否则下次唤醒词
+            // 触发时 IsAudioChannelOpened() 返回 true，跳过 Connecting 状态
+            // 导致 ContinueWakeWordInvoke 直接返回。
+            if (protocol_ && protocol_->IsAudioChannelOpened()) {
+                protocol_->CloseAudioChannel();
+            }
             break;
         case kDeviceStateConnecting:
             display->SetStatus(Lang::Strings::CONNECTING);
@@ -1095,9 +1093,10 @@ void Application::HandleStateChangedEvent() {
             }
             if (listening_mode_ != kListeningModeRealtime) {
                 audio_service_.EnableVoiceProcessing(false);
-                // Only AFE wake word can be detected in speaking mode
-                audio_service_.EnableWakeWordDetection(audio_service_.IsAfeWakeWord());
             }
+            // 唤醒词在 Speaking 期间强制关闭。之前对 AFE 唤醒词保持开启的
+            // 做法会导致唤醒词 AFE 模型吸收 TTS 音频特征，之后无法识别人声。
+            audio_service_.EnableWakeWordDetection(false);
             listening_profile_ = ListeningProfileAfterStop(listening_profile_);
             audio_service_.ResetDecoder();
             break;
@@ -1212,7 +1211,7 @@ void Application::WakeWordInvoke(const std::string& wake_word) {
     
     if (state == kDeviceStateIdle) {
         audio_service_.EncodeWakeWord();
-        uint32_t generation = BeginListeningRequest(kListeningProfileVoice);
+        uint32_t generation = BeginListeningRequest(kListeningProfileVoice, kListeningModeAutoStop);
 
         if (!protocol_->IsAudioChannelOpened()) {
             SetDeviceState(kDeviceStateConnecting);

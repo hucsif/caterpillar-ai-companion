@@ -1,0 +1,1207 @@
+{
+  "meta": {
+    "grade": "二年级上册",
+    "semester_start": "2026-09-01",
+    "teaching_weeks": 20,
+    "source": "D:/codeX/Leon-GO/ref 教材解析（2026-07-13）",
+    "textbooks": {
+      "chinese": "人教版（2022课标修订）语文二年级上册",
+      "math": "人教版（2022课标修订）数学二年级上册",
+      "english": "外研社（一年级起点）英语二年级上册"
+    }
+  },
+  "chinese": {
+    "units": [
+      {
+        "no": 1,
+        "name": "第一单元·阅读",
+        "weeks": [
+          1,
+          2
+        ],
+        "lessons": [
+          "小蝌蚪找妈妈",
+          "我是什么",
+          "植物妈妈有办法",
+          "古诗二首",
+          "村居"
+        ],
+        "kps": [
+          {
+            "type": "concept",
+            "imp": 3,
+            "content": "《小蝌蚪找妈妈》：小蝌蚪长成青蛙的变化过程——先长后腿，再长前腿，尾巴变短"
+          },
+          {
+            "type": "concept",
+            "imp": 3,
+            "content": "《我是什么》：水的变化——汽、云、雨、雹子、雪，'我'就是水"
+          },
+          {
+            "type": "concept",
+            "imp": 2,
+            "content": "《植物妈妈有办法》：蒲公英靠风、苍耳靠动物皮毛、豌豆靠太阳晒炸荚传播种子"
+          },
+          {
+            "type": "word_write",
+            "imp": 3,
+            "content": "会写字：两、就、哪、宽、顶、眼、睛、肚、皮、孩、跳、变、极、片、傍、海、洋、作、坏、给、带"
+          },
+          {
+            "type": "text_recite",
+            "imp": 3,
+            "content": "草长莺飞二月天，拂堤杨柳醉春烟。儿童散学归来早，忙趁东风放纸鸢。",
+            "broadcast_script": "大家来背古诗《村居》吧！"
+          },
+          {
+            "type": "word_write",
+            "imp": 2,
+            "content": "会写字：莺、堤、醉、童、趁、东、风、放、纸、鸢",
+            "broadcast_script": "今天我们要学会写这些生字哦！"
+          }
+        ]
+      },
+      {
+        "no": 2,
+        "name": "第二单元·识字",
+        "weeks": [
+          3,
+          4
+        ],
+        "lessons": [
+          "场景歌",
+          "树之歌",
+          "拍手歌",
+          "田家四季歌"
+        ],
+        "kps": [
+          {
+            "type": "concept",
+            "imp": 3,
+            "content": "《场景歌》：量词的正确使用——一只海鸥、一片沙滩、一艘军舰、一条帆船"
+          },
+          {
+            "type": "text_recite",
+            "imp": 3,
+            "content": "《树之歌》背诵：杨树高，榕树壮，梧桐树叶像手掌……"
+          },
+          {
+            "type": "concept",
+            "imp": 2,
+            "content": "《田家四季歌》：农家四季农事——春播、夏耕、秋收、冬藏"
+          },
+          {
+            "type": "word_write",
+            "imp": 3,
+            "content": "会写字：园、孔、桥、群、队、旗、铜、号、领、巾、杨、壮、桐、枫、松、柏、棉、杉、化、桂"
+          }
+        ]
+      },
+      {
+        "no": 3,
+        "name": "第三单元·阅读",
+        "weeks": [
+          5,
+          6
+        ],
+        "lessons": [
+          "彩虹",
+          "去外婆家",
+          "数星星的孩子"
+        ],
+        "kps": [
+          {
+            "type": "concept",
+            "imp": 2,
+            "content": "《彩虹》：想象'我'拿着水壶到彩虹桥上洒水、把月亮当秋千的奇妙想法"
+          },
+          {
+            "type": "concept",
+            "imp": 3,
+            "content": "《数星星的孩子》：张衡小时候数星星，长大成为天文学家——认真观察、刻苦钻研"
+          },
+          {
+            "type": "word_write",
+            "imp": 3,
+            "content": "会写字：虹、座、浇、提、洒、挑、兴、镇、稻、熊、猫、遍、汽、船、闪、勺、斗、玉、组、珍、珠、数"
+          }
+        ]
+      },
+      {
+        "no": 4,
+        "name": "第四单元·阅读",
+        "weeks": [
+          7,
+          8,
+          9
+        ],
+        "lessons": [
+          "古诗二首（登鹳雀楼/望庐山瀑布）",
+          "黄山奇石",
+          "日月潭",
+          "葡萄沟"
+        ],
+        "kps": [
+          {
+            "type": "text_recite",
+            "imp": 3,
+            "content": "《登鹳雀楼》王之涣：白日依山尽，黄河入海流。欲穷千里目，更上一层楼。"
+          },
+          {
+            "type": "text_recite",
+            "imp": 3,
+            "content": "《望庐山瀑布》李白：日照香炉生紫烟，遥看瀑布挂前川。飞流直下三千尺，疑是银河落九天。"
+          },
+          {
+            "type": "concept",
+            "imp": 3,
+            "content": "《黄山奇石》：仙桃石、猴子观海、仙人指路、金鸡叫天都——用比喻把石头写活"
+          },
+          {
+            "type": "concept",
+            "imp": 2,
+            "content": "《日月潭》在台湾省，北边像圆圆的太阳叫日潭，南边像弯弯的月亮叫月潭"
+          },
+          {
+            "type": "concept",
+            "imp": 2,
+            "content": "《葡萄沟》在新疆吐鲁番，葡萄干是在阴房里晾成的"
+          },
+          {
+            "type": "word_write",
+            "imp": 3,
+            "content": "会写字：楼、依、尽、欲、穷、层、照、炉、烟、挂、川、南、部、些、巨、位、每、升、闪、狗、湖、面、名、胜、迹、央、丽、华"
+          }
+        ]
+      },
+      {
+        "no": 5,
+        "name": "第五单元·阅读",
+        "weeks": [
+          10,
+          11
+        ],
+        "lessons": [
+          "坐井观天",
+          "寒号鸟",
+          "我要的是葫芦"
+        ],
+        "kps": [
+          {
+            "type": "concept",
+            "imp": 3,
+            "content": "《坐井观天》寓意：像青蛙一样眼界狭小还自以为是不行，要跳出'井口'看世界"
+          },
+          {
+            "type": "concept",
+            "imp": 3,
+            "content": "《寒号鸟》寓意：得过且过、只顾眼前不做长远打算，最后会吃苦头"
+          },
+          {
+            "type": "concept",
+            "imp": 3,
+            "content": "《我要的是葫芦》寓意：事物之间有联系——叶子上的蚜虫不治，葫芦也保不住"
+          },
+          {
+            "type": "word_write",
+            "imp": 3,
+            "content": "会写字：井、观、沿、答、渴、喝、话、际、面、阵、朗、枯、却、趁、将、纷、夜、棵、谢、想、言、邻"
+          }
+        ]
+      },
+      {
+        "no": 6,
+        "name": "第六单元·阅读",
+        "weeks": [
+          12,
+          13,
+          14
+        ],
+        "lessons": [
+          "八角楼上",
+          "朱德的扁担",
+          "难忘的泼水节",
+          "刘胡兰"
+        ],
+        "kps": [
+          {
+            "type": "concept",
+            "imp": 3,
+            "content": "《朱德的扁担》：朱德同志和战士们一起挑粮，同甘共苦"
+          },
+          {
+            "type": "concept",
+            "imp": 2,
+            "content": "《难忘的泼水节》：1961年周恩来总理和傣族人民一起过泼水节"
+          },
+          {
+            "type": "concept",
+            "imp": 3,
+            "content": "《刘胡兰》：'生的伟大，死的光荣'——刘胡兰宁死不屈"
+          },
+          {
+            "type": "word_write",
+            "imp": 3,
+            "content": "会写字：楼、夜、披、轻、利、油、灯、想、扁、担、志、伍、师、军、战、士、忘、泼、度、龙、炮、穿、向、令、们、任、村、被、关、道、兰、员、血"
+          }
+        ]
+      },
+      {
+        "no": 7,
+        "name": "第七单元·阅读",
+        "weeks": [
+          15,
+          16
+        ],
+        "lessons": [
+          "古诗二首（江雪/敕勒歌）",
+          "雾在哪里",
+          "雪孩子"
+        ],
+        "kps": [
+          {
+            "type": "text_recite",
+            "imp": 3,
+            "content": "《江雪》柳宗元：千山鸟飞绝，万径人踪灭。孤舟蓑笠翁，独钓寒江雪。"
+          },
+          {
+            "type": "text_recite",
+            "imp": 3,
+            "content": "《敕勒歌》北朝民歌：敕勒川，阴山下。天似穹庐，笼盖四野。天苍苍，野茫茫，风吹草低见牛羊。"
+          },
+          {
+            "type": "concept",
+            "imp": 2,
+            "content": "《雾在哪里》：雾像淘气的孩子，把大海、天空、城市都藏了起来"
+          },
+          {
+            "type": "concept",
+            "imp": 2,
+            "content": "《雪孩子》：雪孩子救小白兔，自己化成了云——舍己救人"
+          },
+          {
+            "type": "word_write",
+            "imp": 3,
+            "content": "会写字：诗、绝、灭、孤、舟、独、钓、似、苍、茫、雾、淘、顽、于、暗、岸、街、梁、屋、久、乎、终、旺、浑、谁、轻"
+          }
+        ]
+      },
+      {
+        "no": 8,
+        "name": "第八单元·阅读",
+        "weeks": [
+          17,
+          18
+        ],
+        "lessons": [
+          "称赞",
+          "纸船和风筝",
+          "快乐的小河"
+        ],
+        "kps": [
+          {
+            "type": "concept",
+            "imp": 3,
+            "content": "《称赞》：小刺猬和小獾互相称赞——真诚的称赞给人自信和快乐"
+          },
+          {
+            "type": "concept",
+            "imp": 3,
+            "content": "《纸船和风筝》：松鼠和小熊用纸船和风筝传递友谊，学会主动和好"
+          },
+          {
+            "type": "word_write",
+            "imp": 3,
+            "content": "会写字：称、赞、刺、猬、板、凳、但、傍、清、消、息、椅、忧、伤、洞、折、张、祝、福、幸、句、幅、抓"
+          }
+        ]
+      },
+      {
+        "no": 9,
+        "name": "期末复习",
+        "weeks": [
+          19,
+          20
+        ],
+        "lessons": [
+          "总复习"
+        ],
+        "kps": [
+          {
+            "type": "text_recite",
+            "imp": 3,
+            "content": "四首古诗总复习：登鹳雀楼、望庐山瀑布、江雪、敕勒歌"
+          },
+          {
+            "type": "word_write",
+            "imp": 3,
+            "content": "写字表全册总复习，重点复习易错字"
+          }
+        ]
+      }
+    ]
+  },
+  "math": {
+    "units": [
+      {
+        "no": 1,
+        "name": "分类与整理",
+        "weeks": [
+          1,
+          2
+        ],
+        "kps": [
+          {
+            "type": "concept",
+            "imp": 3,
+            "content": "可以按不同标准分类：同一堆气球，按形状分和按颜色分，结果不一样"
+          },
+          {
+            "type": "concept",
+            "imp": 3,
+            "content": "分类后用画图、写数等方式记录结果，能看出哪种最多、哪种最少"
+          },
+          {
+            "type": "concept",
+            "imp": 2,
+            "content": "初步认识简单统计表，会用统计结果回答问题"
+          }
+        ]
+      },
+      {
+        "no": 2,
+        "name": "1～6的表内乘法",
+        "weeks": [
+          3,
+          4,
+          5,
+          6
+        ],
+        "kps": [
+          {
+            "type": "concept",
+            "imp": 3,
+            "content": "乘法的意义：求几个相同加数的和，用乘法算更简便。3+3+3+3 就是 4个3，写作 3×4"
+          },
+          {
+            "type": "concept",
+            "imp": 3,
+            "content": "乘法算式各部分：乘数×乘数=积；×读作'乘'"
+          },
+          {
+            "type": "formula",
+            "imp": 3,
+            "content": "1～6的乘法口诀：一一得一……六六三十六，重点是5的口诀和6的口诀"
+          },
+          {
+            "type": "concept",
+            "imp": 3,
+            "content": "用口诀求积：想'五六三十'，所以 5×6=30，6×5 也用同一句口诀"
+          }
+        ]
+      },
+      {
+        "no": 3,
+        "name": "1～6的表内除法",
+        "weeks": [
+          7,
+          8,
+          9
+        ],
+        "kps": [
+          {
+            "type": "concept",
+            "imp": 3,
+            "content": "平均分：每份分得同样多叫平均分。12个苹果平均分给3人，每人4个"
+          },
+          {
+            "type": "concept",
+            "imp": 3,
+            "content": "除法的意义：把一个数平均分成几份求每份是多少，或求一个数里有几个另一个数，用除法。÷读作'除以'"
+          },
+          {
+            "type": "concept",
+            "imp": 3,
+            "content": "用乘法口诀求商：30÷6，想'五六三十'，商是5"
+          },
+          {
+            "type": "concept",
+            "imp": 2,
+            "content": "被除数÷除数=商，乘除法是互逆关系"
+          }
+        ]
+      },
+      {
+        "no": 4,
+        "name": "校园小导游（综合实践）",
+        "weeks": [
+          10
+        ],
+        "kps": [
+          {
+            "type": "concept",
+            "imp": 2,
+            "content": "认识东、南、西、北四个方向：太阳升起的方向是东方，面向东，后面是西，左面是北，右面是南"
+          },
+          {
+            "type": "concept",
+            "imp": 2,
+            "content": "会用方向词描述校园里建筑物的位置，制作方向牌"
+          }
+        ]
+      },
+      {
+        "no": 5,
+        "name": "厘米和米",
+        "weeks": [
+          11,
+          12
+        ],
+        "kps": [
+          {
+            "type": "concept",
+            "imp": 3,
+            "content": "测量长度要用统一的长度单位；量比较短的物体用厘米(cm)，量比较长的物体用米(m)"
+          },
+          {
+            "type": "formula",
+            "imp": 3,
+            "content": "1米 = 100厘米"
+          },
+          {
+            "type": "concept",
+            "imp": 3,
+            "content": "用尺子测量：物体左端对准0刻度，右端对着几就是几厘米"
+          },
+          {
+            "type": "concept",
+            "imp": 2,
+            "content": "认识线段：线段是直的，有两个端点，可以量出长度"
+          }
+        ]
+      },
+      {
+        "no": 6,
+        "name": "身体上的尺子（综合实践）",
+        "weeks": [
+          13
+        ],
+        "kps": [
+          {
+            "type": "concept",
+            "imp": 2,
+            "content": "身体上的'尺子'：一拃、一步、一庹，可以用来估测长度"
+          },
+          {
+            "type": "concept",
+            "imp": 2,
+            "content": "先估一估再量一量，培养估测意识"
+          }
+        ]
+      },
+      {
+        "no": 7,
+        "name": "7～9的表内乘、除法",
+        "weeks": [
+          14,
+          15,
+          16,
+          17
+        ],
+        "kps": [
+          {
+            "type": "formula",
+            "imp": 3,
+            "content": "7的乘法口诀：一七得七……七七四十九"
+          },
+          {
+            "type": "formula",
+            "imp": 3,
+            "content": "8的乘法口诀：一八得八……八八六十四"
+          },
+          {
+            "type": "formula",
+            "imp": 3,
+            "content": "9的乘法口诀：一九得九……九九八十一，9的口诀有规律：积的十位比乘数少1，十位与个位相加等于9"
+          },
+          {
+            "type": "concept",
+            "imp": 3,
+            "content": "用7～9的口诀求商，乘除混合解决实际问题"
+          }
+        ]
+      },
+      {
+        "no": 8,
+        "name": "复习与关联",
+        "weeks": [
+          18,
+          19,
+          20
+        ],
+        "kps": [
+          {
+            "type": "formula",
+            "imp": 3,
+            "content": "乘法口诀表全表：从一一得一到九九八十一，横着背、竖着背、拐弯背"
+          },
+          {
+            "type": "concept",
+            "imp": 3,
+            "content": "全册知识关联复习：分类、乘除法、厘米和米、位置与方向"
+          }
+        ]
+      },
+      {
+        "no": 9,
+        "name": "第一单元·阅读",
+        "kps": [
+          {
+            "type": "concept",
+            "imp": 3,
+            "content": "用0来表示“一个也没有”的概念。",
+            "broadcast_script": "今天我们学习了如何用数字0表示没有东西的概念。"
+          },
+          {
+            "type": "concept",
+            "imp": 2,
+            "content": "生活中哪里可以看到0？",
+            "broadcast_script": "你们知道吗？尺子上的0也是一个很好的例子哦！"
+          }
+        ],
+        "lessons": [
+          "树上一个也没有了，怎么表示？"
+        ],
+        "weeks": [
+          21,
+          22
+        ]
+      }
+    ]
+  },
+  "english": {
+    "units": [
+      {
+        "no": 1,
+        "name": "Module 1",
+        "weeks": [
+          1,
+          2
+        ],
+        "pattern": "I like the ABC song.",
+        "words": [
+          {
+            "w": "song",
+            "cn": "歌曲",
+            "req": true
+          },
+          {
+            "w": "come on",
+            "cn": "加油；快点",
+            "req": false
+          },
+          {
+            "w": "team",
+            "cn": "球队，运动队",
+            "req": false
+          }
+        ]
+      },
+      {
+        "no": 2,
+        "name": "Module 2",
+        "weeks": [
+          3,
+          4
+        ],
+        "pattern": "I don't like meat.",
+        "words": [
+          {
+            "w": "meat",
+            "cn": "肉",
+            "req": false
+          },
+          {
+            "w": "noodles",
+            "cn": "面条",
+            "req": true
+          },
+          {
+            "w": "rice",
+            "cn": "米饭",
+            "req": true
+          },
+          {
+            "w": "sweets",
+            "cn": "糖果",
+            "req": false
+          },
+          {
+            "w": "children",
+            "cn": "孩子们（child的复数）",
+            "req": true
+          },
+          {
+            "w": "nice",
+            "cn": "好的",
+            "req": true
+          },
+          {
+            "w": "ice cream",
+            "cn": "冰淇淋",
+            "req": true
+          }
+        ]
+      },
+      {
+        "no": 3,
+        "name": "Module 3",
+        "weeks": [
+          5,
+          6
+        ],
+        "pattern": "Do you like bananas?",
+        "words": [
+          {
+            "w": "banana",
+            "cn": "香蕉",
+            "req": true
+          },
+          {
+            "w": "apple",
+            "cn": "苹果",
+            "req": true
+          },
+          {
+            "w": "milk",
+            "cn": "奶，牛奶",
+            "req": true
+          },
+          {
+            "w": "orange",
+            "cn": "柑橘，橙",
+            "req": true
+          },
+          {
+            "w": "fruit",
+            "cn": "水果",
+            "req": true
+          },
+          {
+            "w": "everything",
+            "cn": "每件事，所有事物",
+            "req": false
+          },
+          {
+            "w": "tomato",
+            "cn": "番茄，西红柿",
+            "req": true
+          },
+          {
+            "w": "really",
+            "cn": "很，非常",
+            "req": false
+          },
+          {
+            "w": "their",
+            "cn": "他（她/它）们的",
+            "req": true
+          },
+          {
+            "w": "favourite",
+            "cn": "最喜欢的事物",
+            "req": true
+          }
+        ]
+      },
+      {
+        "no": 4,
+        "name": "Module 4",
+        "weeks": [
+          7,
+          8
+        ],
+        "pattern": "Sam likes T-shirts.",
+        "words": [
+          {
+            "w": "T-shirt",
+            "cn": "T恤衫",
+            "req": false
+          },
+          {
+            "w": "dress",
+            "cn": "连衣裙",
+            "req": true
+          },
+          {
+            "w": "too",
+            "cn": "太……",
+            "req": true
+          },
+          {
+            "w": "one",
+            "cn": "一个",
+            "req": false
+          },
+          {
+            "w": "trousers",
+            "cn": "裤子",
+            "req": true
+          },
+          {
+            "w": "party",
+            "cn": "聚会",
+            "req": true
+          }
+        ]
+      },
+      {
+        "no": 5,
+        "name": "Module 5",
+        "weeks": [
+          9,
+          10
+        ],
+        "pattern": "At 7, I get up.",
+        "words": [
+          {
+            "w": "get up",
+            "cn": "起床",
+            "req": false
+          },
+          {
+            "w": "go to school",
+            "cn": "去上学",
+            "req": false
+          },
+          {
+            "w": "have",
+            "cn": "吃，喝",
+            "req": true
+          },
+          {
+            "w": "lunch",
+            "cn": "午餐",
+            "req": true
+          },
+          {
+            "w": "home",
+            "cn": "家",
+            "req": true
+          },
+          {
+            "w": "go home",
+            "cn": "回家",
+            "req": false
+          },
+          {
+            "w": "watch",
+            "cn": "观看",
+            "req": true
+          },
+          {
+            "w": "TV",
+            "cn": "电视；电视机",
+            "req": true
+          }
+        ]
+      },
+      {
+        "no": 6,
+        "name": "Module 6",
+        "weeks": [
+          11,
+          12
+        ],
+        "pattern": "What do you do on Sundays?",
+        "words": [
+          {
+            "w": "on",
+            "cn": "在……的时候",
+            "req": true
+          },
+          {
+            "w": "Sunday",
+            "cn": "星期日",
+            "req": false
+          },
+          {
+            "w": "park",
+            "cn": "公园",
+            "req": true
+          },
+          {
+            "w": "great",
+            "cn": "太好了，好极了",
+            "req": true
+          },
+          {
+            "w": "live",
+            "cn": "居住",
+            "req": true
+          },
+          {
+            "w": "moon",
+            "cn": "月亮",
+            "req": true
+          },
+          {
+            "w": "sky",
+            "cn": "天，天空",
+            "req": false
+          },
+          {
+            "w": "city",
+            "cn": "城市",
+            "req": true
+          }
+        ]
+      },
+      {
+        "no": 7,
+        "name": "Module 7",
+        "weeks": [
+          13,
+          14
+        ],
+        "pattern": "How do you go to school?",
+        "words": [
+          {
+            "w": "how",
+            "cn": "怎样，如何",
+            "req": true
+          },
+          {
+            "w": "train",
+            "cn": "火车",
+            "req": true
+          },
+          {
+            "w": "bus",
+            "cn": "公共汽车",
+            "req": true
+          },
+          {
+            "w": "by",
+            "cn": "乘，坐（交通工具）",
+            "req": true
+          },
+          {
+            "w": "walk",
+            "cn": "步行",
+            "req": true
+          },
+          {
+            "w": "work",
+            "cn": "工作地点；工作",
+            "req": true
+          },
+          {
+            "w": "bike",
+            "cn": "自行车",
+            "req": true
+          },
+          {
+            "w": "with",
+            "cn": "与……在一起；同；跟；和",
+            "req": true
+          },
+          {
+            "w": "run",
+            "cn": "跑，奔跑",
+            "req": true
+          },
+          {
+            "w": "holiday",
+            "cn": "假期",
+            "req": true
+          },
+          {
+            "w": "then",
+            "cn": "然后",
+            "req": true
+          },
+          {
+            "w": "ship",
+            "cn": "轮船",
+            "req": true
+          },
+          {
+            "w": "plane",
+            "cn": "飞机",
+            "req": true
+          },
+          {
+            "w": "love",
+            "cn": "喜爱",
+            "req": true
+          }
+        ]
+      },
+      {
+        "no": 8,
+        "name": "Module 8",
+        "weeks": [
+          15,
+          16
+        ],
+        "pattern": "She goes swimming.",
+        "words": [
+          {
+            "w": "watches",
+            "cn": "（watch的第三人称单数形式）观看",
+            "req": true
+          },
+          {
+            "w": "weekend",
+            "cn": "周末",
+            "req": false
+          },
+          {
+            "w": "read",
+            "cn": "阅读",
+            "req": true
+          },
+          {
+            "w": "come",
+            "cn": "来",
+            "req": true
+          },
+          {
+            "w": "play",
+            "cn": "演奏（乐器）",
+            "req": true
+          },
+          {
+            "w": "music",
+            "cn": "音乐",
+            "req": true
+          },
+          {
+            "w": "listen",
+            "cn": "听",
+            "req": true
+          }
+        ]
+      },
+      {
+        "no": 9,
+        "name": "Module 9",
+        "weeks": [
+          17,
+          18
+        ],
+        "pattern": "It's winter.",
+        "words": [
+          {
+            "w": "winter",
+            "cn": "冬天",
+            "req": true
+          },
+          {
+            "w": "fly",
+            "cn": "放飞（风筝）",
+            "req": true
+          },
+          {
+            "w": "in",
+            "cn": "在……期间，在……时候",
+            "req": true
+          },
+          {
+            "w": "spring",
+            "cn": "春天",
+            "req": true
+          },
+          {
+            "w": "summer",
+            "cn": "夏天",
+            "req": true
+          },
+          {
+            "w": "autumn",
+            "cn": "秋天",
+            "req": true
+          },
+          {
+            "w": "warm",
+            "cn": "温暖的",
+            "req": true
+          },
+          {
+            "w": "wear",
+            "cn": "穿，戴",
+            "req": true
+          },
+          {
+            "w": "jacket",
+            "cn": "夹克，短上衣",
+            "req": false
+          },
+          {
+            "w": "cool",
+            "cn": "凉爽的；酷的",
+            "req": true
+          },
+          {
+            "w": "sweater",
+            "cn": "毛线衫",
+            "req": true
+          },
+          {
+            "w": "glove",
+            "cn": "手套",
+            "req": false
+          },
+          {
+            "w": "cold",
+            "cn": "寒冷的",
+            "req": true
+          },
+          {
+            "w": "coat",
+            "cn": "外套",
+            "req": true
+          }
+        ]
+      },
+      {
+        "no": 10,
+        "name": "Module 10",
+        "weeks": [
+          19,
+          20
+        ],
+        "pattern": "Happy New Year!",
+        "words": [
+          {
+            "w": "year",
+            "cn": "年，年份",
+            "req": true
+          },
+          {
+            "w": "come in",
+            "cn": "进来",
+            "req": false
+          },
+          {
+            "w": "present",
+            "cn": "礼物",
+            "req": false
+          },
+          {
+            "w": "dumpling",
+            "cn": "水饺",
+            "req": false
+          },
+          {
+            "w": "eat",
+            "cn": "吃",
+            "req": true
+          },
+          {
+            "w": "Chinese",
+            "cn": "中国的",
+            "req": true
+          },
+          {
+            "w": "hair",
+            "cn": "头发",
+            "req": true
+          },
+          {
+            "w": "have",
+            "cn": "有",
+            "req": true
+          },
+          {
+            "w": "Christmas",
+            "cn": "圣诞节",
+            "req": false
+          },
+          {
+            "w": "wish",
+            "cn": "祝，祝愿",
+            "req": true
+          },
+          {
+            "w": "dinner",
+            "cn": "正餐，主餐",
+            "req": true
+          }
+        ]
+      },
+      {
+        "no": 11,
+        "name": "Let's act",
+        "words": [
+          {
+            "w": "good",
+            "cn": "好的",
+            "req": false,
+            "phonetic": "/ɡʊd/",
+            "example": "The weather is good today."
+          },
+          {
+            "w": "not",
+            "cn": "不",
+            "req": false,
+            "phonetic": "/nɒt/",
+            "example": "I don't like chocolate."
+          },
+          {
+            "w": "English",
+            "cn": "英语",
+            "req": true,
+            "phonetic": "/ˈɪŋglɪʃ/",
+            "example": "She speaks English fluently."
+          },
+          {
+            "w": "help",
+            "cn": "帮助",
+            "req": true,
+            "phonetic": "/hɛlp/",
+            "example": "Can you help me with my homework?"
+          },
+          {
+            "w": "OK",
+            "cn": "好的",
+            "req": false,
+            "phonetic": "/oʊk/",
+            "example": "Is everything OK?"
+          }
+        ],
+        "pattern": "How do you do? Nice to meet you.",
+        "weeks": [
+          21,
+          22
+        ]
+      },
+      {
+        "no": 12,
+        "name": "Lesson 3",
+        "words": [
+          {
+            "w": "bag",
+            "cn": "书包",
+            "req": false,
+            "phonetic": "/bæg/",
+            "example": "What's in your bag?"
+          },
+          {
+            "w": "book",
+            "cn": "书",
+            "req": true,
+            "phonetic": "/bʊk/",
+            "example": "I have a Chinese book and an English book."
+          }
+        ],
+        "pattern": "询问物品的对话",
+        "weeks": [
+          23,
+          24
+        ]
+      }
+    ]
+  }
+}

@@ -1,0 +1,12 @@
+{
+    "target": "esp32s3",
+    "builds": [
+        {
+            "name": "stackchan-k151-caterpillar",
+            "sdkconfig_append": [
+                "CONFIG_SPIRAM_MODE_QUAD=y",
+                "CONFIG_STACKCHAN_SERVO_FEETECH=y"
+            ]
+        }
+    ]
+}

@@ -1,0 +1,152 @@
+{
+  "child_id": "leon",
+  "note": "二年级典型课程表模板，家长按学校实际课表修改。subject 取值：chinese/math/english/other",
+  "morning_deadline": "07:25",
+  "evening_review_window": [
+    "20:30",
+    "21:15"
+  ],
+  "timetable": {
+    "mon": [
+      {
+        "period": 1,
+        "subject": "chinese",
+        "name": "语文"
+      },
+      {
+        "period": 2,
+        "subject": "math",
+        "name": "数学"
+      },
+      {
+        "period": 3,
+        "subject": "other",
+        "name": "体育",
+        "items": "穿运动鞋，带跳绳和水壶"
+      },
+      {
+        "period": 4,
+        "subject": "english",
+        "name": "英语"
+      },
+      {
+        "period": 5,
+        "subject": "other",
+        "name": "道德与法治"
+      }
+    ],
+    "tue": [
+      {
+        "period": 1,
+        "subject": "math",
+        "name": "数学"
+      },
+      {
+        "period": 2,
+        "subject": "chinese",
+        "name": "语文"
+      },
+      {
+        "period": 3,
+        "subject": "other",
+        "name": "音乐"
+      },
+      {
+        "period": 4,
+        "subject": "chinese",
+        "name": "语文"
+      },
+      {
+        "period": 5,
+        "subject": "other",
+        "name": "美术",
+        "items": "带彩笔和图画本"
+      }
+    ],
+    "wed": [
+      {
+        "period": 1,
+        "subject": "chinese",
+        "name": "语文"
+      },
+      {
+        "period": 2,
+        "subject": "math",
+        "name": "数学"
+      },
+      {
+        "period": 3,
+        "subject": "english",
+        "name": "英语"
+      },
+      {
+        "period": 4,
+        "subject": "other",
+        "name": "体育",
+        "items": "穿运动鞋，带跳绳和水壶"
+      },
+      {
+        "period": 5,
+        "subject": "other",
+        "name": "科学",
+        "items": "带科学课本"
+      }
+    ],
+    "thu": [
+      {
+        "period": 1,
+        "subject": "math",
+        "name": "数学"
+      },
+      {
+        "period": 2,
+        "subject": "chinese",
+        "name": "语文"
+      },
+      {
+        "period": 3,
+        "subject": "other",
+        "name": "体育",
+        "items": "穿运动鞋，带跳绳和水壶"
+      },
+      {
+        "period": 4,
+        "subject": "other",
+        "name": "音乐"
+      },
+      {
+        "period": 5,
+        "subject": "chinese",
+        "name": "语文"
+      }
+    ],
+    "fri": [
+      {
+        "period": 1,
+        "subject": "chinese",
+        "name": "语文"
+      },
+      {
+        "period": 2,
+        "subject": "math",
+        "name": "数学"
+      },
+      {
+        "period": 3,
+        "subject": "english",
+        "name": "英语"
+      },
+      {
+        "period": 4,
+        "subject": "other",
+        "name": "班会"
+      },
+      {
+        "period": 5,
+        "subject": "other",
+        "name": "美术",
+        "items": "带彩笔和图画本"
+      }
+    ]
+  }
+}

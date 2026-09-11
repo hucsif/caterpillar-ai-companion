@@ -46,3 +46,17 @@ firmware/main/boards/stackchan/avatar_images.local.h
 
 # uv lockfile is OK to commit
 # (allow-listed by absence of uv.lock entry above)
+
+# Backup / temp files
+*.bak
+*.backup.*
+firmware/main/.backup-emoji-ui/
+
+# Claude local config
+.claude/
+.claude-plugin/
+
+# Caterpillar runtime state & generated output
+caterpillar/state/
+caterpillar/cloud/out/
+caterpillar/cloud/__pycache__/

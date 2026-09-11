@@ -426,6 +426,7 @@ bool WebsocketProtocol::OpenAudioChannelInternal(bool report_error, bool arm_aud
         websocket_->SetHeader("Device-Id", SystemInfo::GetMacAddress().c_str());
         websocket_->SetHeader("Client-Id", Board::GetInstance().GetUuid().c_str());
 
+        // 解析两种帧（文本和二进制）
         websocket_->OnData([this, notify_disconnect, arm_audio_channel](const char* data, size_t len, bool binary) {
             if (binary) {
                 // Drop binary frames before parsing when the device is not

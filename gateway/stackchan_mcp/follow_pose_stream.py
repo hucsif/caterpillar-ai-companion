@@ -46,10 +46,10 @@ class FollowPoseStreamConfig:
     flip_yaw: int = 1
     flip_pitch: int = 1
     pitch_center_deg: int = 45
-    downsample_hz: float = 20.0
-    max_step_deg: float = 12.0
-    speed_dps: int = 240
-    smoothing_window: int = 5
+    downsample_hz: float = 10.0     # 匹配雷达 10fps 输出频率
+    max_step_deg: float = 24.0      # 每步 24°×10fps=240°/s 匹配舵机上限
+    speed_dps: int = 240             # 舵机最高角速度 (SCS0009)
+    smoothing_window: int = 2        # 2 帧平滑, 雷达10fps=200ms延迟, 降低滞后感
     seed_from_device: bool = True
     reconnect_initial_backoff_s: float = 1.5
     reconnect_max_backoff_s: float = 30.0

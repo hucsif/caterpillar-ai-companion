@@ -56,6 +56,7 @@ public:
     
     // Set whether to hide chat messages/subtitles
     void SetHideSubtitle(bool hide);
+    void BringUIBarsToFront();
 };
 
 // SPI LCD display

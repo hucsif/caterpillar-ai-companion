@@ -208,6 +208,11 @@ elseif(CONFIG_BOARD_TYPE_STACKCHAN)
     set(BUILTIN_TEXT_FONT font_puhui_basic_20_4)
     set(BUILTIN_ICON_FONT font_awesome_20_4)
     set(DEFAULT_EMOJI_COLLECTION twemoji_64)
+elseif(CONFIG_BOARD_TYPE_STACKCHAN_K151_CATERPILLAR)
+    set(BOARD_TYPE "stackchan-k151-caterpillar")
+    set(BUILTIN_TEXT_FONT font_puhui_basic_20_4)
+    set(BUILTIN_ICON_FONT font_awesome_20_4)
+    set(DEFAULT_EMOJI_COLLECTION twemoji_64)
 elseif(CONFIG_BOARD_TYPE_M5STACK_CORE_TAB5)
     set(BOARD_TYPE "m5stack-tab5")
     set(BUILTIN_TEXT_FONT font_puhui_basic_30_4)
@@ -824,8 +829,12 @@ else()
     )
 endif()
 
-if(CONFIG_BOARD_TYPE_STACKCHAN)
-    set(STACKCHAN_BOARD_DIR ${CMAKE_CURRENT_SOURCE_DIR}/boards/stackchan)
+if(CONFIG_BOARD_TYPE_STACKCHAN OR CONFIG_BOARD_TYPE_STACKCHAN_K151_CATERPILLAR)
+    if(CONFIG_BOARD_TYPE_STACKCHAN_K151_CATERPILLAR)
+        set(STACKCHAN_BOARD_DIR ${CMAKE_CURRENT_SOURCE_DIR}/boards/stackchan-k151-caterpillar)
+    else()
+        set(STACKCHAN_BOARD_DIR ${CMAKE_CURRENT_SOURCE_DIR}/boards/stackchan)
+    endif()
     set(STACKCHAN_LOCAL_AVATAR_CC ${STACKCHAN_BOARD_DIR}/avatar_images.local.cc)
     set(STACKCHAN_LOCAL_AVATAR_H ${STACKCHAN_BOARD_DIR}/avatar_images.local.h)
     if(EXISTS ${STACKCHAN_LOCAL_AVATAR_CC})
@@ -863,6 +872,33 @@ if(CONFIG_BOARD_TYPE_STACKCHAN)
             "${CMAKE_CURRENT_SOURCE_DIR}/../components/feetech_scs")
         message(STATUS "StackChan: using MIT FeetechScs driver, excluding SCServo_lib sources from build")
     endif()
+
+    # StackChan 矢量表情（Avatar）系统 — 程序化绘图的表情引擎
+    # 从 StackChan 固件移植，包括：核心框架、Default 皮肤、
+    # 表情装饰器（爱心/生气/汗滴/害羞/眩晕）、动画修饰器（眨眼/呼吸/说话）
+    list(APPEND SOURCES
+        "avatar/skins/default.cpp"
+        "avatar/skins/eyes.cpp"
+        "avatar/skins/mouth.cpp"
+        "avatar/skins/speech_bubble.cpp"
+        "avatar/skins/assets/default_bubble_arrow.c"
+        "avatar/decorators/angry.cpp"
+        "avatar/decorators/dizzy.cpp"
+        "avatar/decorators/heart.cpp"
+        "avatar/decorators/shy.cpp"
+        "avatar/decorators/sweat.cpp"
+        "avatar/decorators/assets/decorator_angry.c"
+        "avatar/decorators/assets/decorator_dizzy.c"
+        "avatar/decorators/assets/decorator_heart.c"
+        "avatar/decorators/assets/decorator_shy.c"
+        "avatar/decorators/assets/decorator_sweat.c"
+        "avatar/animation/animation.cpp"
+    )
+    list(APPEND INCLUDE_DIRS "avatar")
+
+    # 小黄脸 emoji 代码保留编译（assets/lcd_display 依赖），
+    # 运行时通过 HideEmojiDisplay() 隐藏，矢量 avatar 接管显示。
+    message(STATUS "StackChan: vector avatar active (emoji hidden at runtime)")
 endif()
 list(APPEND SOURCES ${BOARD_SOURCES})
 
@@ -1029,6 +1065,14 @@ if(CONFIG_STACKCHAN_MDNS_DISCOVERY)
     list(APPEND SOURCES "protocols/mdns_candidate_extract.cc")
     list(APPEND MAIN_PRIV_REQUIRES_EXTRA espressif__mdns)
 endif()
+
+# Caterpillar (毛毛虫智感) components: R60ABD1 radar parser, FSM, and
+# broadcast scheduler. These are declared unconditionally because ESP-IDF v5.5's
+# component_requirements.py pre-check runs before CMake variable expansion;
+# conditional PRIV_REQUIRES via ${VAR} are not expanded at that stage.
+# This is safe for non-StackChan boards: only the dependency graph is updated;
+# no binary size impact unless the board's sources actually #include the headers.
+list(APPEND MAIN_PRIV_REQUIRES_EXTRA caterpillar_broadcast caterpillar_radar esp_http_client)
 
 idf_component_register(SRCS ${SOURCES}
                     EMBED_FILES ${LANG_SOUNDS} ${COMMON_SOUNDS}

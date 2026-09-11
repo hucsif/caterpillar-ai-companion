@@ -95,7 +95,7 @@ config FORCE_DEFAULT_WEBSOCKET_URL
 
 config STACKCHAN_MDNS_DISCOVERY
     bool "Discover stackchan-mcp gateway with mDNS"
-    default y if BOARD_TYPE_STACKCHAN
+    default y if BOARD_TYPE_STACKCHAN || BOARD_TYPE_STACKCHAN_K151_CATERPILLAR
     default n
     help
         When enabled, firmware queries the local network for
@@ -351,6 +351,9 @@ choice BOARD_TYPE
         depends on IDF_TARGET_ESP32S3
     config BOARD_TYPE_STACKCHAN
         bool "StackChan (M5Stack CoreS3 + Servo)"
+        depends on IDF_TARGET_ESP32S3
+    config BOARD_TYPE_STACKCHAN_K151_CATERPILLAR
+        bool "StackChan K151 Caterpillar (毛毛虫智感 · M5Stack CoreS3 + Radar)"
         depends on IDF_TARGET_ESP32S3
     config BOARD_TYPE_M5STACK_CORE_TAB5
         bool "M5Stack Tab5"
@@ -1072,7 +1075,7 @@ menu "TAIJIPAI_S3_CONFIG"
         启动双声道
 endmenu
 
-if BOARD_TYPE_STACKCHAN
+if BOARD_TYPE_STACKCHAN || BOARD_TYPE_STACKCHAN_K151_CATERPILLAR
 
 choice STACKCHAN_SERVO_DRIVER
     prompt "StackChan Servo Driver"
@@ -1137,6 +1140,6 @@ config STACKCHAN_AUTO_TORQUE_RELEASE_MS
         Runtime-overridable via the set_auto_torque_release MCP tool
         (session override, not persisted across reboot).
 
-endif # BOARD_TYPE_STACKCHAN
+endif # BOARD_TYPE_STACKCHAN || BOARD_TYPE_STACKCHAN_K151_CATERPILLAR
 
 endmenu

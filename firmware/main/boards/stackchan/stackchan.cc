@@ -9,6 +9,8 @@
 #include "mcp_server.h"
 #include "settings.h"
 #include "led_strip.h"
+#include "caterpillar_http.h"
+#include "caterpillar_radar_glue.h"
 // Issue #79: servo driver is selectable at build time via Kconfig.
 //   - CONFIG_STACKCHAN_SERVO_SCSCL  (default): GPL-3.0 SCServo_lib
 //   - CONFIG_STACKCHAN_SERVO_FEETECH: MIT clean-room driver vendored at
@@ -32,6 +34,7 @@ static inline bool ServoWritePosOk(int r) { return r > 0; }
 #include "avatar_images.h"
 #include "avatar_set.h"
 #include "avatar_set_fetcher.h"
+#include "avatar/avatar_system.h"
 
 #include <smooth_ui_toolkit.hpp>
 #include <esp_log.h>
@@ -501,7 +504,7 @@ private:
     }
 };
 
-class StackChanBoard : public WifiBoard {
+class StackChanBoard : public WifiBoard, public stackchan::Modifiable {
 private:
     // Internal I2C bus (shared by AXP2101 / AW9523 / FT6336 / PY32 / Si12T /
     // audio codec / IMU). Direct on-board ICs only; not exposed through
@@ -544,6 +547,16 @@ private:
     lv_obj_t* avatar_img_ = nullptr;
     esp_timer_handle_t avatar_init_timer_ = nullptr;
     std::string current_avatar_face_ = "idle";
+
+    // ---- 矢量表情系统 (移植自 StackChan) ----
+    // 程序化绘制的 DefaultAvatar（眼睛+眼皮+嘴巴+气泡），替代位图 avatar
+    std::unique_ptr<stackchan::avatar::DefaultAvatar> vector_avatar_;
+    stackchan::ObjectPool<stackchan::Modifier> avatar_modifier_pool_;
+    esp_timer_handle_t vector_avatar_update_timer_ = nullptr;
+    int blink_modifier_id_ = -1;
+    int breath_modifier_id_ = -1;
+    int idle_expression_modifier_id_ = -1;
+    static constexpr uint32_t VECTOR_AVATAR_UPDATE_MS = 30;  // ~33fps
 
     // Board-local listening cue shown above the full-screen avatar layer.
     lv_obj_t* listening_indicator_ = nullptr;
@@ -4535,6 +4548,8 @@ private:
             ESP_LOGW(TAG, "SetAvatarExpression('%s') deferred (face unknown or screen not ready)", face);
             return ok;
         }
+        // 同步表情到矢量 avatar（在锁外调用，避免死锁）
+        SyncEmotionToVectorAvatar(face);
         // Coming back from "off": if blink was on before going off, restart
         // it so the user does not have to re-issue set_blink. The default
         // experience is "blink follows the avatar".
@@ -4593,6 +4608,131 @@ private:
         return SetAvatarExpression(face);
     }
 
+
+    // ---- 矢量表情系统：情绪字符串 → Emotion 枚举映射 ----
+    static stackchan::avatar::Emotion MapEmotionToAvatar(const char* emotion) {
+        if (!emotion || emotion[0] == '\0') return stackchan::avatar::Emotion::Neutral;
+        if (strcmp(emotion, "neutral") == 0)   return stackchan::avatar::Emotion::Neutral;
+        if (strcmp(emotion, "happy") == 0 || strcmp(emotion, "laughing") == 0 ||
+            strcmp(emotion, "funny") == 0 || strcmp(emotion, "loving") == 0)
+            return stackchan::avatar::Emotion::Happy;
+        if (strcmp(emotion, "angry") == 0)     return stackchan::avatar::Emotion::Angry;
+        if (strcmp(emotion, "sad") == 0 || strcmp(emotion, "crying") == 0 ||
+            strcmp(emotion, "sleepy") == 0)
+            return stackchan::avatar::Emotion::Sad;
+        if (strcmp(emotion, "thinking") == 0 || strcmp(emotion, "confused") == 0)
+            return stackchan::avatar::Emotion::Doubt;
+        if (strcmp(emotion, "surprised") == 0 || strcmp(emotion, "shocked") == 0)
+            return stackchan::avatar::Emotion::Happy;  // 惊喜用 Happy 近似
+        return stackchan::avatar::Emotion::Neutral;
+    }
+
+    // 将外部表情变更同步到矢量 avatar
+    void SyncEmotionToVectorAvatar(const char* emotion) {
+        if (!vector_avatar_ || !display_) return;
+        auto e = MapEmotionToAvatar(emotion);
+        DisplayLockGuard lock(display_);
+        vector_avatar_->setEmotion(e);
+    }
+
+    // 矢量 avatar 更新定时器回调 — 驱动修饰器和 avatar 每帧更新
+    static void VectorAvatarUpdateCb(void* arg) {
+        auto* self = static_cast<StackChanBoard*>(arg);
+        if (!self->vector_avatar_ || !self->display_) return;
+
+        DisplayLockGuard lock(self->display_);
+        // 定期确保 avatar 面板在最顶层（防止被 emoji/chat 覆盖）
+        static int frame_count = 0;
+        if (++frame_count % 10 == 0) {
+            self->display_->BringUIBarsToFront();
+        }
+        self->avatar_modifier_pool_.forEach([self](stackchan::Modifier* m, int) {
+            m->_update(*self);
+        });
+        self->avatar_modifier_pool_.cleanup();
+        self->vector_avatar_->update();
+    }
+
+    // 延迟初始化矢量 avatar — 等待 LVGL 屏幕树就绪
+    // 独立于 bitmap avatar 的 InitializeAvatar，不依赖 SetAvatarExpression
+    void InitializeVectorAvatarDeferred() {
+        ESP_LOGI(TAG, "Scheduling vector avatar init (deferred until SetupUI completes)");
+        esp_timer_create_args_t timer_args = {
+            .callback = [](void* arg) {
+                StackChanBoard* self = static_cast<StackChanBoard*>(arg);
+                if (self->TryCreateVectorAvatar()) {
+                    ESP_LOGI(TAG, "Vector avatar created successfully, stopping init timer");
+                    if (self->avatar_init_timer_ != nullptr) {
+                        esp_timer_stop(self->avatar_init_timer_);
+                        esp_timer_delete(self->avatar_init_timer_);
+                        self->avatar_init_timer_ = nullptr;
+                    }
+                }
+            },
+            .arg = this,
+            .dispatch_method = ESP_TIMER_TASK,
+            .name = "vec_avatar_init",
+            .skip_unhandled_events = true,
+        };
+        ESP_ERROR_CHECK(esp_timer_create(&timer_args, &avatar_init_timer_));
+        ESP_ERROR_CHECK(esp_timer_start_periodic(avatar_init_timer_, 500 * 1000));
+    }
+
+    // 尝试创建矢量 avatar，屏幕就绪时返回 true
+    bool TryCreateVectorAvatar() {
+        if (vector_avatar_) return true;  // 已创建
+
+        if (!display_) {
+            return false;
+        }
+
+        DisplayLockGuard lock(display_);
+        lv_obj_t* screen = lv_screen_active();
+        if (!screen) {
+            return false;
+        }
+
+        // 确认 SetupUI 已完成 (屏幕上有子对象)
+        if (lv_obj_get_child_cnt(screen) == 0) {
+            ESP_LOGD(TAG, "Vector avatar init: screen has no children yet, waiting...");
+            return false;
+        }
+
+        // 创建矢量表情
+        vector_avatar_ = std::make_unique<stackchan::avatar::DefaultAvatar>();
+        vector_avatar_->primaryColor   = lv_color_white();
+        vector_avatar_->secondaryColor = lv_color_black();
+        auto* font = LV_FONT_DEFAULT;
+        vector_avatar_->init(screen, font);
+        vector_avatar_->setEmotion(stackchan::avatar::Emotion::Neutral);
+
+        // 将 avatar 面板移到最顶层
+        if (auto* panel = vector_avatar_->getPanel()) {
+            lv_obj_move_foreground(panel->get());
+        }
+
+        // 添加眨眼和呼吸修饰器
+        blink_modifier_id_ = avatar_modifier_pool_.create(
+            std::make_unique<stackchan::BlinkModifier>(0, 4000, 150));
+        breath_modifier_id_ = avatar_modifier_pool_.create(
+            std::make_unique<stackchan::BreathModifier>(0, 12, 6600, 600));
+
+        // 启动更新定时器（~33fps）
+        esp_timer_create_args_t update_args = {
+            .callback = VectorAvatarUpdateCb,
+            .arg = this,
+            .dispatch_method = ESP_TIMER_TASK,
+            .name = "vec_avatar_upd",
+            .skip_unhandled_events = true,
+        };
+        ESP_ERROR_CHECK(esp_timer_create(&update_args, &vector_avatar_update_timer_));
+        ESP_ERROR_CHECK(esp_timer_start_periodic(vector_avatar_update_timer_,
+                                                  VECTOR_AVATAR_UPDATE_MS * 1000));
+        ESP_LOGI(TAG, "Vector avatar ready: blink=%d breath=%d update=%" PRIu32 "ms",
+                 blink_modifier_id_, breath_modifier_id_, VECTOR_AVATAR_UPDATE_MS);
+        return true;
+    }
+
     // Schedule a one-shot/periodic timer that keeps trying to install the
     // initial avatar image until the LVGL screen tree is ready (i.e. after
     // Application::Start() has run Display::SetupUI()).
@@ -4605,7 +4745,10 @@ private:
                     ESP_LOGI(TAG, "Initial avatar (idle) installed");
                     if (board->avatar_init_timer_ != nullptr) {
                         esp_timer_stop(board->avatar_init_timer_);
+                        board->avatar_init_timer_ = nullptr;
                     }
+                    // 屏幕树就绪 → 同时创建矢量表情 avatar
+                    board->InitializeVectorAvatar();
                 }
             },
             .arg = this,
@@ -7057,6 +7200,9 @@ private:
                 return root;
             });
 
+        caterpillar_register_mcp_tools(mcp_server);
+        caterpillar_radar_register_mcp_tools(mcp_server);
+
         ESP_LOGI(TAG, "StackChan MCP tools registered");
     }
 
@@ -7085,10 +7231,11 @@ public:
         InitializeTouchSettings();
         InitializeSi12tTouch();
         I2cDetect();
-        // Avatar auto-display disabled: WiFi config UI needs to be visible.
-        // Avatar is shown on-demand via MCP set_avatar command.
-        // InitializeAvatar();
+        // 矢量 avatar 在 SetupUI 完成后延迟创建
+        InitializeVectorAvatarDeferred();
         InitializeMouthSequenceTask();
+        caterpillar_http_init(nullptr);  // URL 自动从 NVS websocket.url 推导
+        caterpillar_radar_init();
         RegisterMcpTools();
     }
 
@@ -7109,6 +7256,14 @@ public:
 
     virtual Display* GetDisplay() override {
         return display_;
+    }
+
+    // ---- stackchan::Modifiable 接口实现 ----
+    stackchan::avatar::Avatar& avatar() override {
+        return *vector_avatar_;
+    }
+    bool hasAvatar() override {
+        return vector_avatar_ != nullptr;
     }
 
     virtual Camera* GetCamera() override {
@@ -7144,6 +7299,11 @@ public:
 
     virtual void OnTtsStop() override {
         StopTtsLipSync();
+    }
+
+    // 网关 llm 表情消息 → 同步到矢量 avatar
+    virtual void OnEmotionChanged(const char* emotion) override {
+        SyncEmotionToVectorAvatar(emotion);
     }
 
     // Phase 4.5 avatar (saiverse-stackchan-addon): handle the gateway's

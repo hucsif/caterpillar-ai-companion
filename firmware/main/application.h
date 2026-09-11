@@ -100,7 +100,8 @@ public:
      * Start listening (event-based, thread-safe)
      * Sends MAIN_EVENT_START_LISTENING to be handled in Run()
      */
-    void StartListening(ListeningProfile profile = kListeningProfileVoice);
+    void StartListening(ListeningProfile profile = kListeningProfileVoice,
+                        ListeningMode mode = kListeningModeManualStop);
 
     /**
      * Stop listening (event-based, thread-safe)
@@ -144,6 +145,7 @@ private:
     DeviceStateMachine state_machine_;
     ListeningMode listening_mode_ = kListeningModeAutoStop;
     std::atomic<ListeningProfile> pending_listening_profile_{kListeningProfileVoice};
+    std::atomic<ListeningMode> pending_listening_mode_{kListeningModeManualStop};
     std::atomic<uint32_t> pending_listening_generation_{0};
     std::atomic<uint32_t> listening_request_generation_{0};
     ListeningProfile listening_profile_ = kListeningProfileVoice;
@@ -156,6 +158,7 @@ private:
     bool aborted_ = false;
     bool assets_version_checked_ = false;
     bool play_popup_on_listening_ = false;  // Flag to play popup sound after state changes to listening
+    bool wake_word_triggered_ = false;      // 唤醒词触发了本轮对话，TTS后自动重入倾听一次
     int clock_ticks_ = 0;
     TaskHandle_t activation_task_handle_ = nullptr;
 
@@ -169,7 +172,8 @@ private:
     void HandleNetworkDisconnectedEvent();
     void HandleActivationDoneEvent();
     void HandleWakeWordDetectedEvent();
-    uint32_t BeginListeningRequest(ListeningProfile profile);
+    uint32_t BeginListeningRequest(ListeningProfile profile,
+                                    ListeningMode mode = kListeningModeManualStop);
     void InvalidatePendingListeningRequest();
     bool IsListeningRequestCurrent(uint32_t generation) const;
     void ContinueOpenAudioChannel(ListeningMode mode, uint32_t generation);

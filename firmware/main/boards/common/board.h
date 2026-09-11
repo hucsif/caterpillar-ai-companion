@@ -97,6 +97,8 @@ public:
     // StackChanBoard overrides to spawn a worker task that performs the
     // HTTP fetch via AvatarSetFetcher and loads the result into avatar_set_.
     virtual void OnAvatarSetFetch(const cJSON* root) { (void)root; }
+    virtual void OnEmotionChanged(const char* emotion) { (void)emotion; }
+    virtual void OnWakeWord() {}
 };
 
 #define DECLARE_BOARD(BOARD_CLASS_NAME) \
